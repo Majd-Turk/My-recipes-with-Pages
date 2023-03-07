@@ -1,23 +1,28 @@
+let currentPage = 1
+let totalPages = 1
 function performSearch(ingredient, dairySensitive, glutenSensitive, currentPage) {
+
   return searchRecipes(ingredient, dairySensitive, glutenSensitive, currentPage)
     .then(function (data) {
       if (data.recipes.length === 0) {
         $('#recipes').html('<p>No recipes found.</p>')
-      } else {
-        displayRecipes(data.recipes, data.currentPage , data.totalPages)
+      } else { 
         totalPages = data.totalPages
+        currentPage = currentPage > totalPages ? totalPages : currentPage
+        displayRecipes(data.recipes, currentPage, totalPages)
+        return {
+          data: data,
+          totalPages: totalPages
+        }
       }
     })
 }
 
-$(function () {
-  let currentPage = 1
 
   $('#searchBtn').on("click", function () {
     const ingredient = $('#ingredient').val()
     const dairySensitive = $('#dairy-free').is(':checked')
     const glutenSensitive = $('#gluten-free').is(':checked')
-    currentPage = 1
     performSearch(ingredient, dairySensitive, glutenSensitive, currentPage)
   })
 
@@ -27,10 +32,24 @@ $(function () {
     const glutenSensitive = $('#gluten-free').is(':checked')
     if ($(this).attr('id') === "nextPage") {
       currentPage++;
+    } else if ($(this).attr('id') === "prevPage") {
+      currentPage--;
     } else {
       currentPage = parseInt($(this).text())
     }
     performSearch(ingredient, dairySensitive, glutenSensitive, currentPage)
+      .then(function (data) {
+        if (currentPage >= data.totalPages) {
+          $("#nextPage").hide();
+        } else {
+          $("#nextPage").show();
+        }
+        if (currentPage <= 1) {
+          $("#prevPage").hide();
+        } else {
+          $("#prevPage").show();
+        }
+      })
   })
 
   $(document).on("click", ".recipe-image", function () {
@@ -38,4 +57,4 @@ $(function () {
     let firstIngredient = $(ingredients[0]).text()
     alert(firstIngredient)
   })
-})
+

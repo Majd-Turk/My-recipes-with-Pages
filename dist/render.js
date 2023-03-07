@@ -1,7 +1,6 @@
 const source = $('#recipe-template').html()
 const recipeTemplate = Handlebars.compile(source)
 
-let currentPage = 1
 const perPage = 4
 
 function displayRecipes(recipes, currentPage, totalPages) {
@@ -9,9 +8,7 @@ function displayRecipes(recipes, currentPage, totalPages) {
     recipes = Array.from(recipes)
   }
   const $recipes = $('#recipes')
-  let start = (currentPage - 1) * perPage
-  let end = start + perPage
-  let newHtml = recipeTemplate({ data: recipes.slice(start, end) })
+  let newHtml = recipeTemplate({ data: recipes })
 
   $recipes.empty()
 
@@ -42,4 +39,5 @@ function renderResults(recipes) {
   const totalResults = recipes.length
   const totalPages = Math.ceil(totalResults / perPage)
   displayRecipes(recipes, currentPage, totalPages)
+  totalPages = totalPages
 }

@@ -1,5 +1,5 @@
-function searchRecipes(ingredient, dairy, gluten) {
-  let apiUrl = `/recipes/${ingredient}`
+function searchRecipes(ingredient, dairy, gluten, currentPage) {
+  let apiUrl = `/recipes/${ingredient}?page=${currentPage}`
   if (dairy || gluten) {
     apiUrl += "?"
     if (dairy) {
