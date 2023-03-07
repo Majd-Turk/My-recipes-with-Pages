@@ -4,9 +4,7 @@ const recipeTemplate = Handlebars.compile(source)
 const perPage = 4
 
 function displayRecipes(recipes, currentPage, totalPages) {
-  if (!Array.isArray(recipes)) {
-    recipes = Array.from(recipes)
-  }
+ 
   const $recipes = $('#recipes')
   let newHtml = recipeTemplate({ data: recipes })
 
